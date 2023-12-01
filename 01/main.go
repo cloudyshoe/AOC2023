@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+    "math"
 	"os"
 	"strconv"
 	"strings"
@@ -19,64 +20,52 @@ var spelledOut = map[string]int{
     "nine":  9,
 }
 
-func DigitFromString(line string, reverse bool) int {
-    value := 0
-    lineLen := len(line)
+var digits = "123456789"
 
-    for i, char := range line {
-        strChar := ""
-        if reverse {
-            strChar = string(line[lineLen-i-1])
-        } else {
-            strChar = string(char)
-        }
-        value, err := strconv.Atoi(strChar)
-        if err == nil { return value }
-    }
+func DigitsFromString(line string) (int, int, int, int) {
+    firstIndex := strings.IndexAny(line,digits)
+    if firstIndex < 0 { return -1, -1, -1, -1 }
+    first, _ := strconv.Atoi(string(line[firstIndex]))
 
-    return value
+    lastIndex := strings.LastIndexAny(line,digits)
+    last, _ := strconv.Atoi(string(line[lastIndex]))
+
+    return first, firstIndex, last, lastIndex
 }
 
-func DigitFromStringWithWords(line string, reverse bool) int {
-    result := 0
+func DigitsFromStringWithWords(line string) int {
     lineLen := len(line)
+    firstFound := false
+    lastFound := false
 
-    for i, char := range line {
-        strChar := ""
-        if reverse {
-            strChar = string(line[lineLen-i-1])
-        } else {
-            strChar = string(char)
-        }
+    first, firstIndex, last, lastIndex := DigitsFromString(line)
+    if firstIndex < 2 && firstIndex >= 0 { firstFound = true }
+    if lastIndex > lineLen-3 { lastFound = true }
+    if firstIndex == -1 { firstIndex = math.MaxInt }
 
-        if value := DigitFromString(strChar, reverse); value != 0 {
-            return value
-        }
-
-        word := ""
-        if reverse {
-            word = line[lineLen-i-1:]
-        } else {
-            word = line[:i]
-        }
-
-        for key, value := range spelledOut {
-            if strings.Contains(word, key) {
-                return value
-            }
-        }
+    for key, value := range spelledOut {
+        tmpFi := strings.Index(line, key)
+        tmpLi := strings.LastIndex(line, key)
+        if !firstFound && tmpFi < firstIndex && tmpFi >= 0 {
+               firstIndex = tmpFi
+               first = value
+           }
+        if !lastFound && tmpLi > lastIndex {
+               lastIndex = tmpLi
+               last = value
+           }
     }
-    return result
-}
 
+    return first*10+last
+}
 
 func PartOne(arr *[]string) int {
 	input := *arr
 	result := 0
 
 	for _, line := range input {
-        result += DigitFromString(line, false) * 10
-        result += DigitFromString(line, true)
+        first, _, last, _ := DigitsFromString(line)
+        result += first*10+last
 	}
 
 	return result
@@ -87,15 +76,16 @@ func PartTwo(arr *[]string) int {
 	result := 0
 
 	for _, line := range input {
-        result += DigitFromStringWithWords(line, false) * 10
-        result += DigitFromStringWithWords(line, true)
+        result += DigitsFromStringWithWords(line)
 	}
 
-	return result }
+	return result
+}
 
 func main() {
 	inputFile, _ := os.ReadFile("input.txt")
-	input := strings.Split(string(inputFile), "\n")
+    inputLen := len(inputFile)
+    input := strings.Split(string(inputFile[:inputLen-2]), "\n")
 
 	partOneResult := PartOne(&input)
 	fmt.Printf("Part One: %d\n", partOneResult)

@@ -8,7 +8,8 @@ import (
 
 func TestPartOne(t *testing.T) {
 	exampleBytes, _ := os.ReadFile("example_part_one.txt")
-	example := strings.Split(string(exampleBytes), "\n")
+    exampleLen := len(exampleBytes)
+    example := strings.Split(string(exampleBytes[:exampleLen-2]), "\n")
 	want := 142
 
 	got := PartOne(&example)
@@ -22,7 +23,8 @@ func TestPartOne(t *testing.T) {
 
 func TestPartTwo(t *testing.T) {
 	exampleBytes, _ := os.ReadFile("example_part_two.txt")
-	example := strings.Split(string(exampleBytes), "\n")
+    exampleLen := len(exampleBytes)
+    example := strings.Split(string(exampleBytes[:exampleLen-2]), "\n")
 	want := 281
 
 	got := PartTwo(&example)
@@ -32,12 +34,22 @@ func TestPartTwo(t *testing.T) {
 	}
 }
 
-
 func BenchmarkPartOne(b *testing.B) {
 	inputBytes, _ := os.ReadFile("input.txt")
-	input := strings.Split(string(inputBytes), "\n")
+    inputLen := len(inputBytes)
+    input := strings.Split(string(inputBytes[:inputLen-2]), "\n")
 
     for i := 0; i < b.N; i++ {
         PartOne(&input)
+    }
+}
+
+func BenchmarkPartTwo(b *testing.B) {
+	inputBytes, _ := os.ReadFile("input.txt")
+    inputLen := len(inputBytes)
+    input := strings.Split(string(inputBytes[:inputLen-2]), "\n")
+
+    for i := 0; i < b.N; i++ {
+        PartTwo(&input)
     }
 }
