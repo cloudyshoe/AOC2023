@@ -34,23 +34,17 @@ func DigitsFromString(line string) (int, int, int, int) {
 }
 
 func DigitsFromStringWithWords(line string) int {
-    lineLen := len(line)
-    firstFound := false
-    lastFound := false
-
     first, firstIndex, last, lastIndex := DigitsFromString(line)
-    if firstIndex < 2 && firstIndex >= 0 { firstFound = true }
-    if lastIndex > lineLen-3 { lastFound = true }
     if firstIndex == -1 { firstIndex = math.MaxInt }
 
     for key, value := range spelledOut {
         tmpFi := strings.Index(line, key)
         tmpLi := strings.LastIndex(line, key)
-        if !firstFound && tmpFi < firstIndex && tmpFi >= 0 {
+        if tmpFi < firstIndex && tmpFi >= 0 {
                firstIndex = tmpFi
                first = value
            }
-        if !lastFound && tmpLi > lastIndex {
+        if tmpLi > lastIndex {
                lastIndex = tmpLi
                last = value
            }
