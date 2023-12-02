@@ -32,6 +32,7 @@ func PartOne(arr *[]string) int {
 				if bagContents[color] < count {
 					possible = false
 				}
+                if !possible { break }
 			}
 		}
 		
@@ -64,9 +65,7 @@ func PartTwo(arr *[]string) int {
 				var count int
 				var color string
 				fmt.Sscanf(cube, "%d %s", &count, &color)
-				if bagContents[color] < count {
-					bagContents[color] = count
-				}
+                bagContents[color] = max(bagContents[color], count)
 			}
 		}
 		
