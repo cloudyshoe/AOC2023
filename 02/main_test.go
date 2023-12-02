@@ -1,53 +1,53 @@
 package main
 
 import (
-	"testing"
-	"os"
-	"strings"
+    "testing"
+    "os"
+    "strings"
 )
 
 func TestPartOne(t *testing.T) {
-	inputFile, _ := os.ReadFile("example.txt")
-	inputLen := len(inputFile)
-	input := strings.Split(string(inputFile[:inputLen-1]), "\n")
-	want := 8
+    inputFile, _ := os.ReadFile("example.txt")
+    inputLen := len(inputFile)
+    input := strings.Split(string(inputFile[:inputLen-1]), "\n")
+    want := 8
 
-	got := PartOne(&input)
+    got := PartOne(&input)
 
-	if got != want {
-		t.Errorf("expected '%d' but got '%d'", want, got)
-	}
+    if got != want {
+        t.Errorf("expected '%d' but got '%d'", want, got)
+    }
 }
 
 func TestPartTwo(t *testing.T) {
-	inputFile, _ := os.ReadFile("example.txt")
-	inputLen := len(inputFile)
-	input := strings.Split(string(inputFile[:inputLen-1]), "\n")
-	want := 2286
+    inputFile, _ := os.ReadFile("example.txt")
+    inputLen := len(inputFile)
+    input := strings.Split(string(inputFile[:inputLen-1]), "\n")
+    want := 2286
 
-	got := PartTwo(&input)
+    got := PartTwo(&input)
 
-	if got != want {
-		t.Errorf("expected '%d' but got '%d'", want, got)
-	}
+    if got != want {
+        t.Errorf("expected '%d' but got '%d'", want, got)
+    }
 }
 
 func BenchmarkPartOne(b *testing.B) {
-	inputFile, _ := os.ReadFile("example.txt")
-	inputLen := len(inputFile)
-	input := strings.Split(string(inputFile[:inputLen-1]), "\n")
+    inputFile, _ := os.ReadFile("example.txt")
+    inputLen := len(inputFile)
+    input := strings.Split(string(inputFile[:inputLen-1]), "\n")
 
-	for i := 0; i < b.N; i++ {
-		PartOne(&input)
-	}
+    for i := 0; i < b.N; i++ {
+        PartOne(&input)
+    }
 }
 
 func BenchmarkPartTwo(b *testing.B) {
-	inputFile, _ := os.ReadFile("example.txt")
-	inputLen := len(inputFile)
-	input := strings.Split(string(inputFile[:inputLen-1]), "\n")
+    inputFile, _ := os.ReadFile("example.txt")
+    inputLen := len(inputFile)
+    input := strings.Split(string(inputFile[:inputLen-1]), "\n")
 
-	for i := 0; i < b.N; i++ {
-		PartTwo(&input)
-	}
+    for i := 0; i < b.N; i++ {
+        PartTwo(&input)
+    }
 }
