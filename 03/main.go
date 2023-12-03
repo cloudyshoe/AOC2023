@@ -47,12 +47,12 @@ func PartOne(arr *[]string) int {
 	var valid bool
 
 	for row := 0; row < len(input); row++ {
-        rowStr := input[row]
-        col := 0
+		rowStr := input[row]
+		col := 0
 		for col < len(input[row]) {
-            index := strings.IndexAny(rowStr[col:], digits)
-            if index >= 0 {
-				col, valid, partNum = processNumber(row, col + index, arr)
+			index := strings.IndexAny(rowStr[col:], digits)
+			if index >= 0 {
+				col, valid, partNum = processNumber(row, col+index, arr)
 				if valid {
 					result += partNum
 				}
@@ -109,13 +109,13 @@ func PartTwo(arr *[]string) int {
 	potentialGears := make(map[int][]int)
 
 	for row := 0; row < len(input); row++ {
-        rowStr := input[row]
-        col := 0
+		rowStr := input[row]
+		col := 0
 		for col < len(input[row]) {
-            index := strings.IndexAny(rowStr[col:], digits)
-            if index >= 0 {
+			index := strings.IndexAny(rowStr[col:], digits)
+			if index >= 0 {
 				var tmp map[int][]int
-				col, tmp = processNumberP2(row, col + index, arr)
+				col, tmp = processNumberP2(row, col+index, arr)
 				for k, v := range tmp {
 					for _, num := range v {
 						_, ok := potentialGears[k]
