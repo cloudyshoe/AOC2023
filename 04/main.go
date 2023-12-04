@@ -6,7 +6,6 @@ import (
     "math"
     "slices"
     "strings"
-    //"strconv"
 )
 
 func PartOne(arr *[]string) int  {
@@ -15,7 +14,6 @@ func PartOne(arr *[]string) int  {
 
     for _, line := range input {
         gm := strings.Split(line, ": ")
-        //game := strconv.Atoi(strings.Split(gm[0], " "))
         groups := strings.Split(gm[1], " | ")
         winningNums := strings.Fields(groups[0])
         cardNums := strings.Fields(groups[1])
@@ -38,7 +36,6 @@ func PartTwo(arr *[]string) int {
 
     for cardIndex, line := range input {
         gm := strings.Split(line, ": ")
-        //card, _ := strconv.Atoi(strings.Split(gm[0], " ")[1])
         groups := strings.Split(gm[1], " | ")
         winningNums := strings.Fields(groups[0])
         cardNums := strings.Fields(groups[1])
