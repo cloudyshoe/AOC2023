@@ -3,14 +3,23 @@ package main
 import (
     "os"
     "fmt"
-    "math"
     "slices"
     "strings"
 )
 
+func IntPow(base int, exp int) int {
+    if exp == 0 { return 1 }
+    result := 1
+    for i := 1; i <= exp; i++ {
+        result *= base
+    }
+    return result
+}
+
+
 func PartOne(arr *[]string) int  {
     input := *arr
-    result := float64(0)
+    result := 0
 
     for _, line := range input {
         gm := strings.Split(line, ": ")
@@ -21,10 +30,10 @@ func PartOne(arr *[]string) int  {
         for _, num := range cardNums {
             if slices.Contains(winningNums, num) { exp++ }
         }
-        if exp > -1 { result += math.Pow(float64(2),float64(exp)) }
+        if exp > -1 { result += IntPow(2,exp) }
     }
 
-    return int(result)
+    return result
 }
 
 func PartTwo(arr *[]string) int {
