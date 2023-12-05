@@ -11,6 +11,8 @@ import (
 type CategoryRange struct {
     srcStart int
     srcEnd int
+    dstStart int
+    dstEnd int
     dstOffset int
 }
 
@@ -22,11 +24,25 @@ func (c CategoryRange) InRange (x int) int {
     }
 }
 
+func (c CategoryRange) InDstRange (x int) int {
+    if x >= c.dstStart && x <= c.dstEnd {
+        return x - c.dstOffset
+    } else {
+        return -1
+    }
+}
+
 type SeedRange struct {
     start int
     end int
 }
 
+func (s SeedRange) InRange (x int) bool {
+    if x >= s.start && x <= s.end {
+        return true
+    }
+    return false
+}
 func WalkTheMap(categories map[string][]CategoryRange, mapIndex string, val int) int {
     for _, category := range categories[mapIndex] {
         mapping := category.InRange(val)
@@ -48,6 +64,29 @@ func WalkTheMaps(seed int, categories map[string][]CategoryRange) int {
     location := WalkTheMap(categories, "humidity-to-location", humidity)
 
     return location
+}
+
+func WalkBackward(categories map[string][]CategoryRange, mapIndex string, val int) int {
+    for _, category := range categories[mapIndex] {
+        mapping := category.InDstRange(val)
+        if mapping >= 0 {
+            return mapping
+        }
+    }
+    return val
+}
+
+func WalkBackwards(location int, categories map[string][]CategoryRange) int {
+
+    humidity := WalkBackward(categories, "humidity-to-location", location)
+    temperature := WalkBackward(categories, "temperature-to-humidity", humidity)
+    light := WalkBackward(categories, "light-to-temperature", temperature)
+    water := WalkBackward(categories, "water-to-light", light)
+    fertilizer := WalkBackward(categories, "fertilizer-to-water", water)
+    soil := WalkBackward(categories, "soil-to-fertilizer", fertilizer)
+    seed := WalkBackward(categories, "seed-to-soil", soil)
+
+    return seed
 }
 
 func PartOne(arr *[]string) int  {
@@ -96,9 +135,11 @@ func PartOne(arr *[]string) int  {
 
 func PartTwo(arr *[]string) int {
     input := *arr
-    result := math.MaxInt
+    //result := math.MaxInt
     var categories = make(map[string][]CategoryRange, len(input)-1)
     var seeds []SeedRange
+    minSeed := 0
+    maxSeed := 0
 
     for i, group := range input {
         if i != 0 {
@@ -116,7 +157,9 @@ func PartTwo(arr *[]string) int {
                     categories[mapName],
                     CategoryRange{
                         srcStart: src,
-                        srcEnd: src + length -1,
+                        srcEnd: src + length - 1,
+                        dstStart: dst,
+                        dstEnd: dst + length - 1,
                         dstOffset: dst - src,
                 })
             }
@@ -125,19 +168,22 @@ func PartTwo(arr *[]string) int {
             for i := 0; i < len(seedList); i += 2 {
                 start, _:= strconv.Atoi(seedList[i])
                 length, _ := strconv.Atoi(seedList[i+1])
-                seeds = append(seeds, SeedRange{ start: start, end: start + length -1 })
+                end := start + length - 1
+                if start < minSeed { minSeed = start }
+                if end > maxSeed { maxSeed = end }
+                seeds = append(seeds, SeedRange{ start: start, end: end })
             }
         }
     }
 
-    for _, seed := range seeds {
-        for i := seed.start; i <= seed.end; i++ {
-            tmp := WalkTheMaps(i, categories)
-            if tmp < result { result = tmp }
+    for location := minSeed; location <= maxSeed; location++ {
+        seed := WalkBackwards(location, categories)
+        for _, rng := range seeds {
+            if rng.InRange(seed) { return location }
         }
     }
 
-    return result
+    return 0
 }
 
 func main () {
