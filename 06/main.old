@@ -1,0 +1,49 @@
+package main
+
+import (
+    "os"
+    "fmt"
+    "strconv"
+    "strings"
+)
+
+func PartOne(arr *[]string) int  {
+    input := *arr
+    result := 0
+
+    var times []int
+    var distances []int
+
+    for _, time := range strings.Fields(input[0])[1:] {
+        newTime, _ := strconv.Atoi(time)
+        times = append(times, newTime)
+    }
+    for _, distance := range strings.Fields(input[1])[1:] {
+        newDistance, _ := strconv.Atoi(distance)
+        times = append(times, newDistance)
+    }
+
+    fmt.Println(times)
+    fmt.Println(distances)
+
+    return result
+}
+
+func PartTwo(arr *[]string) int {
+    //input := *arr
+    result := 0
+
+    return result
+}
+
+func main () {
+    inputFile, _ := os.ReadFile("input.txt")
+    inputLen := len(inputFile)
+    input := strings.Split(string(inputFile[:inputLen-1]), "\n")
+
+    partOneResult := PartOne(&input)
+    fmt.Printf("Part One Result: %d\n", partOneResult)
+
+    partTwoResult := PartTwo(&input)
+    fmt.Printf("Part Two Result: %d\n", partTwoResult)
+}
