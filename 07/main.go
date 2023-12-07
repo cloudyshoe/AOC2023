@@ -119,8 +119,21 @@ func ScoreHand(cards []string) HandStrengh {
 	}
 }
 
-func JokerScore(cards string) HandStrengh {
+func JokerScoreOld(cards string) HandStrengh {
 	othercards := "23456789TAQK"
+	scores := make([]HandStrengh, len(othercards))
+
+	for i, card := range othercards {
+		testCards := strings.Split(strings.Replace(cards,"J",string(card),-1),"")
+		scores[i] = ScoreHand(testCards)
+	}
+	
+	return slices.Max(scores)
+}
+
+func JokerScore(cards string) HandStrengh {
+	othercards := strings.Replace(cards,"J","",-1)
+	if len(othercards) == 0 { return FiveOfAKind }
 	scores := make([]HandStrengh, len(othercards))
 
 	for i, card := range othercards {
